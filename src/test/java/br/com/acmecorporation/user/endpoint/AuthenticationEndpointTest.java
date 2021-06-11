@@ -35,7 +35,7 @@ class AuthenticationEndpointTest {
 
     @Test
     @DisplayName("Usuário cadastrado deve conseguir recuperar um token de acesso")
-    void createTask() throws Exception {
+    void authenticate() throws Exception {
         // Given
         String newTask ="{\"username\":\"wile.coyote@acmecorporation.com\", \"password\": \"123456\"}";
 
@@ -48,6 +48,20 @@ class AuthenticationEndpointTest {
                 .andExpect(jsonPath("$.type").value("Bearer"))
                 .andExpect(jsonPath("$.token").isNotEmpty())
                 .andExpect(jsonPath("$.expirationDate").exists());
+    }
+
+    @Test
+    @DisplayName("Caso o usuário digite dados incorretos a aplicação não retornar erro 400")
+    void notAuthenticate() throws Exception {
+        // Given
+        String newTask ="{\"username\":\"wile@acmecorporation.com\", \"password\": \"12\"}";
+
+        //When
+        ResultActions actions = mockMvc.perform(post(URL)
+                .content(newTask)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+        //Then
+        actions.andExpect(status().isBadRequest());
     }
 
 }
