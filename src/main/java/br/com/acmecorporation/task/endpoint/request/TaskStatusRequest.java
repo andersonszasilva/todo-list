@@ -2,9 +2,6 @@ package br.com.acmecorporation.task.endpoint.request;
 
 import br.com.acmecorporation.task.domain.TaskStatus;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 

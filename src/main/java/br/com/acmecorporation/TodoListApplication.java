@@ -35,7 +35,7 @@ public class TodoListApplication {
 		user1.setAuthorities(Arrays.asList(authorityUser));
 		User user2 = new User("road.runner@acmecorporation.com", passwordEncoder.encode("123456"), "Road Runner");
 		user2.setAuthorities(Arrays.asList(authorityUser));
-		User superUser = new User("superuser@acmecorporation.com", passwordEncoder.encode("123456"), "Super User");
+		User superUser = new User("super.user@acmecorporation.com", passwordEncoder.encode("123456"), "Super User");
 		superUser.setAuthorities(Arrays.asList(new Authority("SUPER_USER")));
 
 		userRepository.saveAll(Arrays.asList(user1, user2, superUser));

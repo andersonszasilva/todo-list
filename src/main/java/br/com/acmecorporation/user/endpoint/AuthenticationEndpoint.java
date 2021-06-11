@@ -1,8 +1,9 @@
 package br.com.acmecorporation.user.endpoint;
 
+import br.com.acmecorporation.user.domain.AccessToken;
 import br.com.acmecorporation.user.service.TokenService;
-import br.com.acmecorporation.user.endpoint.request.UserRequest;
-import br.com.acmecorporation.user.endpoint.response.UserResponse;
+import br.com.acmecorporation.user.endpoint.request.AuthenticationRequest;
+import br.com.acmecorporation.user.endpoint.response.AuthenticationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,14 +29,14 @@ public class AuthenticationEndpoint {
     }
 
     @PostMapping
-    public ResponseEntity<?> authenticate(@RequestBody UserRequest request) {
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
-            UsernamePasswordAuthenticationToken authenticationToken = request.convert();
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            Authentication authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-            String token  = tokenService.generateToken(authentication);
+            AccessToken accessToken = tokenService.generateToken(authentication);
 
-            return  ResponseEntity.ok(new UserResponse(token, "Bearer"));
+            return  ResponseEntity.ok(new AuthenticationResponse(accessToken.getToken(), "Bearer", accessToken.getExpirationDate()));
         } catch (AuthenticationException e) {
              return ResponseEntity.badRequest().build();
         }

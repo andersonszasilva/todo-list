@@ -1,12 +1,14 @@
 package br.com.acmecorporation.task.endpoint.request;
 
-import br.com.acmecorporation.user.domain.User;
-import br.com.acmecorporation.task.domain.TaskStatus;
 import br.com.acmecorporation.task.domain.Task;
+import br.com.acmecorporation.task.domain.TaskStatus;
+import br.com.acmecorporation.user.domain.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDateTime;
 
-public class TaskRequet {
+public class TaskRequest {
 
     private String summary;
     private String description;
@@ -14,15 +16,6 @@ public class TaskRequet {
 
     public Task create(User user) {
        return new Task(user, createDate, summary, description, TaskStatus.PENDING, null);
-    }
-
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
     }
 
     public String getSummary() {
@@ -39,6 +32,19 @@ public class TaskRequet {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
 }

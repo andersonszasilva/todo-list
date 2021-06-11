@@ -21,12 +21,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private AuthenticationService authenticationService;
-    @Autowired
     private TokenService tokenService;
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public WebSecurityConfig(AuthenticationService authenticationService, TokenService tokenService, UserRepository userRepository) {
+        super(false);
+        this.authenticationService = authenticationService;
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Bean
@@ -34,15 +39,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    // autenticação
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(authenticationService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 
-
-    // autorizações
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -53,13 +55,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(new AuthenticationFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
-    }
-
-
-    // configuraçõe estáticos
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
     }
 
 }

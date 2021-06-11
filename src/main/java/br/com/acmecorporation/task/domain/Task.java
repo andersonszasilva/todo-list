@@ -87,4 +87,12 @@ public class Task {
     public void setUpdateDate(LocalDateTime updateDate) {
         this.updateDate = updateDate;
     }
+
+    public Long getUserId() {
+        return user.getId();
+    }
+
+    public String getOwner() {
+        return user.getUsername();
+    }
 }

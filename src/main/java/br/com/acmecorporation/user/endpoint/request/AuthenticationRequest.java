@@ -2,7 +2,7 @@ package br.com.acmecorporation.user.endpoint.request;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class UserRequest {
+public class AuthenticationRequest {
 
     private String username;
     private String password;
@@ -23,7 +23,4 @@ public class UserRequest {
         this.password = password;
     }
 
-    public UsernamePasswordAuthenticationToken convert() {
-        return new UsernamePasswordAuthenticationToken(username, password);
-    }
 }
