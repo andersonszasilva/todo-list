@@ -49,7 +49,7 @@ class TaskEndpointTest {
         String request ="{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}";
 
         //When
-        ResultActions actions = mockMvc.perform(post(URL)
+        ResultActions actions = this.mockMvc.perform(post(URL)
                 .content(request)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
         //Then
@@ -69,7 +69,7 @@ class TaskEndpointTest {
                 .andExpect(status().isCreated());
 
         // And
-        MvcResult result = mockMvc.perform(post(URL)
+        MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao barbeiro\",\"description\": \"Fazer barba e corte de cabelo\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
@@ -92,12 +92,33 @@ class TaskEndpointTest {
                 .andExpect(jsonPath("$.[0].status").value("PENDING"));
     }
 
+
+    @Test
+    @WithUserDetails("super.user@acmecorporation.com")
+    @DisplayName("Super usuário  deve conseguir listar tarefas de outros usuários")
+    void getTasksWithSuperUser() throws Exception {
+        // Given
+        MvcResult result = this.mockMvc.perform(post(URL)
+                .content("{\"summary\": \"Ir ao barbeiro\",\"description\": \"Fazer barba e corte de cabelo\"}")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated()).andReturn();
+
+        //When
+        ResultActions actions = this.mockMvc.perform(get(URL)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+
+        //Then
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].status").value("PENDING"))
+                .andExpect(jsonPath("$.[0].user").exists());
+    }
+
     @Test
     @WithUserDetails("wile.coyote@acmecorporation.com")
     @DisplayName("Usuário logado deve conseguir mudar o estado da sua própria tarefa")
     void changeTaskStatus() throws Exception {
         // Given
-        MvcResult result = mockMvc.perform(post(URL)
+        MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
@@ -122,7 +143,7 @@ class TaskEndpointTest {
     @DisplayName("Usuário logado deve conseguir visualizar a sua tarefa")
     void getTask() throws Exception {
         // Given
-        MvcResult result = mockMvc.perform(post(URL)
+        MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
@@ -146,7 +167,7 @@ class TaskEndpointTest {
     @DisplayName("Usuário logado deve conseguir editar a sua tarefa")
     void testUpdateTask() throws Exception {
         // Given
-        MvcResult result = mockMvc.perform(post(URL)
+        MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
@@ -171,7 +192,7 @@ class TaskEndpointTest {
     @DisplayName("Usuário logado deve conseguir deletar a sua tarefa")
     void deleteTask() throws Exception {
         // Given
-        MvcResult result = mockMvc.perform(post(URL)
+        MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andReturn();
