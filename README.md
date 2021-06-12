@@ -308,5 +308,8 @@ Então, a aplicação retornará com os seguintes dados sobre o seu estado e de 
 }
 ```
 
-Caso tenha ficado alguma dúvida fique à vontade para explorar mais sobre a api na documentação a seguir: ``` http://localhost:8080/swagger-ui.html ```
+Caso tenha ficado alguma dúvida fique à vontade para explorar mais sobre a api na documentação a seguir: ``` http://localhost:8080/swagger-ui.html ``` ou pelas collections do Postman na pasta "postman" dentro do projeto.
+
+Obrigado!
+
 ## That's all folks!
