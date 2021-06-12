@@ -3,7 +3,6 @@ package br.com.acmecorporation.task.endpoint;
 import br.com.acmecorporation.task.domain.Task;
 import br.com.acmecorporation.task.domain.TaskStatus;
 import br.com.acmecorporation.task.endpoint.request.TaskRequest;
-import br.com.acmecorporation.task.endpoint.request.StatusRequest;
 import br.com.acmecorporation.task.endpoint.request.TaskStatusRequest;
 import br.com.acmecorporation.task.endpoint.request.TaskUpdateRequest;
 import br.com.acmecorporation.task.endpoint.response.TaskResponse;
