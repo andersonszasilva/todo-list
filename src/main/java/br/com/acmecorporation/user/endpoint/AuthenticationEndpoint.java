@@ -4,6 +4,7 @@ import br.com.acmecorporation.user.domain.AccessToken;
 import br.com.acmecorporation.user.service.TokenService;
 import br.com.acmecorporation.user.endpoint.request.AuthenticationRequest;
 import br.com.acmecorporation.user.endpoint.response.AuthenticationResponse;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Api(tags = "/auth")
 public class AuthenticationEndpoint {
 
     private AuthenticationManager authenticationManager;

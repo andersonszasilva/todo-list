@@ -10,6 +10,8 @@ import br.com.acmecorporation.task.endpoint.response.TaskWithUserResponse;
 import br.com.acmecorporation.task.exception.TaskNotFoundException;
 import br.com.acmecorporation.task.service.TaskService;
 import br.com.acmecorporation.user.domain.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/todo")
+@Api(tags = "/todo")
 public class TaskEndpoint {
 
     private static final Logger log = LoggerFactory.getLogger(TaskEndpoint.class);
@@ -34,6 +37,7 @@ public class TaskEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<TaskResponse> createTask(@RequestBody TaskRequest request, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Criando nova tarefa : {} - Usuário: {}", request, loggedUser.getUsername());
@@ -44,6 +48,7 @@ public class TaskEndpoint {
     }
 
     @GetMapping
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) TaskStatus status, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Listando tarefas com o Usuário: {} - Filtros: {}", loggedUser.getUsername(), status);
@@ -65,6 +70,7 @@ public class TaskEndpoint {
     }
 
     @PatchMapping("/{id}")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<?> changeTaskStatus(@PathVariable Long id, @RequestBody TaskStatusRequest status, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Alterando estado da tarefa com id: {} novo status :{} com usuário: {}", id, status, loggedUser.getUsername());
@@ -79,6 +85,7 @@ public class TaskEndpoint {
     }
 
     @DeleteMapping("/{id}")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<?> deleteTask(@PathVariable Long id, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Deletando tarefa de id: {} com usuário: {}", id, loggedUser.getUsername());
@@ -92,6 +99,7 @@ public class TaskEndpoint {
     }
 
     @GetMapping ("/{id}")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<?> getTask(@PathVariable Long id, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
 
@@ -106,6 +114,7 @@ public class TaskEndpoint {
     }
 
     @PutMapping("/{id}")
+    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskUpdateRequest request, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Alterando tarefa com id: {} novos valores :{} com usuário: {}", id, request, loggedUser.getUsername());

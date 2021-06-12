@@ -1,4 +1,4 @@
-package br.com.acmecorporation.task.config;
+package br.com.acmecorporation.config;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
