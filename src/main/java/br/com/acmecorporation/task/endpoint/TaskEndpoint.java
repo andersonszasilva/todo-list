@@ -58,11 +58,9 @@ public class TaskEndpoint {
             return ResponseEntity.ok(TaskWithUserResponse.createListResponse(tasks));
         }
 
-
         List<Task> tasks = taskService.findAllBy(loggedUser, status);
         log.info("Um total de: {} tarefa(s) listada(s) para o Usuário: {}", tasks.size(), loggedUser.getUsername());
         return ResponseEntity.ok(TaskResponse.createListResponse(tasks));
-
 
     }
 
@@ -115,9 +113,9 @@ public class TaskEndpoint {
         Optional<Task> task = taskService.findBy(id, loggedUser);
         if(task.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        Task saved = taskService.save(request.merge(task.get()));
+        Task saved = taskService.save(request.buildTask(task.get()));
         log.info("Tarefa com id: {} alterada com usuário: {}", id,  loggedUser.getUsername());
-        return new ResponseEntity<>(TaskResponse.createResponse(task.get()), HttpStatus.OK);
+        return new ResponseEntity<>(TaskResponse.createResponse(saved), HttpStatus.OK);
     }
 
 }

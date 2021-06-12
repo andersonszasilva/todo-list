@@ -43,14 +43,6 @@ public class User implements UserDetails {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     @JsonIgnore
     public String getPassword() {
@@ -59,10 +51,6 @@ public class User implements UserDetails {
 
     public String getFullName() {
         return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public void setAuthorities(List<Authority> authorities) {

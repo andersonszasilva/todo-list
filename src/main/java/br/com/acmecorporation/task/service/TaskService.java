@@ -8,6 +8,7 @@ import br.com.acmecorporation.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,7 @@ public class TaskService {
 
         Task task = taskToComplete.get();
         task.setStatus(status);
+        task.setUpdateDate(LocalDateTime.now());
         return save(task);
     }
 

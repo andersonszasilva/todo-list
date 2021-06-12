@@ -1,7 +1,5 @@
 package br.com.acmecorporation.user.endpoint.request;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
 public class AuthenticationRequest {
 
     private String username;

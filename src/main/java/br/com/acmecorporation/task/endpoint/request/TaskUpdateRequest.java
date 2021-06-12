@@ -16,27 +16,15 @@ public class TaskUpdateRequest {
         return summary;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public LocalDateTime getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(LocalDateTime updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Task merge(Task task) {
+    public Task buildTask(Task task) {
         task.setSummary(this.summary);
         task.setDescription(this.description);
         task.setUpdateDate(LocalDateTime.now());

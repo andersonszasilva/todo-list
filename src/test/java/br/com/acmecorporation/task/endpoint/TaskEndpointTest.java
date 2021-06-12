@@ -177,12 +177,12 @@ class TaskEndpointTest {
 
         //When
         ResultActions actions = this.mockMvc.perform(put(URL + "/{id}", id)
-                .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas e leite\"}")
+                .content("{\"summary\": \"Ir ao mercado da esquina\",\"description\": \"Comprar cervejas e leite\"}")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
         // Then
         actions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.summary").value("Ir ao mercado"))
+                .andExpect(jsonPath("$.summary").value("Ir ao mercado da esquina"))
                 .andExpect(jsonPath("$.description").value("Comprar cervejas e leite"));
 
     }
