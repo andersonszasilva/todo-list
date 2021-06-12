@@ -5,16 +5,17 @@ import br.com.acmecorporation.user.service.TokenService;
 import br.com.acmecorporation.user.endpoint.request.AuthenticationRequest;
 import br.com.acmecorporation.user.endpoint.response.AuthenticationResponse;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,6 +32,11 @@ public class AuthenticationEndpoint {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Autenticação feita com sucesso"),
+            @ApiResponse(code = 400, message = "Usuário e/ou senha inválido(s)")
+    })
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             Authentication authentication = authenticationManager

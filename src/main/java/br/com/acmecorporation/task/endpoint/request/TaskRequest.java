@@ -12,10 +12,9 @@ public class TaskRequest {
 
     private String summary;
     private String description;
-    private LocalDateTime createDate = LocalDateTime.now();
 
     public Task create(User user) {
-       return new Task(user, this.createDate, this.summary, this.description, TaskStatus.PENDING, null);
+       return new Task(user, LocalDateTime.now(), this.summary, this.description, TaskStatus.PENDING, null);
     }
 
     public String getSummary() {
@@ -24,10 +23,6 @@ public class TaskRequest {
 
     public String getDescription() {
         return description;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
     }
 
     @Override

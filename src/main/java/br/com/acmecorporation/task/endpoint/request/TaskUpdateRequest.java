@@ -10,7 +10,6 @@ public class TaskUpdateRequest {
 
     private String summary;
     private String description;
-    private LocalDateTime updateDate = LocalDateTime.now();
 
     public String getSummary() {
         return summary;
@@ -18,10 +17,6 @@ public class TaskUpdateRequest {
 
     public String getDescription() {
         return description;
-    }
-
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
     }
 
     public Task buildTask(Task task) {

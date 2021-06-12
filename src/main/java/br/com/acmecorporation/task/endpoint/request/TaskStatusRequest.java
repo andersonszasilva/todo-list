@@ -1,35 +1,16 @@
 package br.com.acmecorporation.task.endpoint.request;
 
 import br.com.acmecorporation.task.domain.TaskStatus;
-import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.util.Arrays;
+public class TaskStatusRequest {
 
-public enum TaskStatusRequest {
+    private StatusRequest status;
 
-    PENDING("PENDING"),
-    COMPLETED("COMPLETED");
-
-    private String status;
-
-    TaskStatusRequest(String status) {
-        this.status = status;
-    }
-
-    public String getStatus() {
+    public StatusRequest getStatus() {
         return status;
     }
 
-    @JsonCreator
-    public static TaskStatusRequest forValue(String status) {
-        return Arrays.stream(TaskStatusRequest.values())
-                .filter(value -> value.status.equals(status))
-                .findFirst().orElse(null);
-    }
-
     public TaskStatus convertTaskStatus() {
-        return TaskStatus.valueOf(this.name());
+        return TaskStatus.valueOf(this.status.name());
     }
-
-
 }

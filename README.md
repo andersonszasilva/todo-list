@@ -10,13 +10,14 @@ Foi criado uma RESTFUL API simples em Java que armazena e atualiza tarefas (TODO
 
 ## Tecnologias utilizadas
     
-- Spring Boot 2.5.0
+- Spring Boot 2.5.0 (https://spring.io/blog/2021/05/20/spring-boot-2-5-is-now-ga)
     - Spring Data
     - Spring Security
     - Spring Sleuth
     - Spring Actuator
-- H2 Database
-- JSON Web Token
+- H2 Database (https://www.h2database.com/html/main.html)
+- JSON Web Token (https://jwt.io/)
+- Springfox (https://springfox.github.io/springfox/)
 
 ## Instruções para executar
 
@@ -43,7 +44,7 @@ git clone git@github.com:andersonszasilva/todo-list.git
 ```shell
 docker build -f docker/local.dockerfile -t todo-list . && docker run -p 8080:8080 todo-list
 ```
-- Obs.: Caso queira rodar a aplicação pelo gradle mesmo utilize o comando abaixo:
+- **Obs.:** Caso queira rodar a aplicação pelo gradle mesmo utilize o comando abaixo:
 
 ```
 ./gradlew bootRun
@@ -125,7 +126,7 @@ Então é criado uma nova tarefa e o estado HTTP retornado é o 201 de CREATED e
 ```
 Para alterar o estado da tarefa de "PENDING" para "COMPLETED" ou vice-versa, poderá ser feito com a seguinte chamada: 
 
-Atenção: a aplicação de todo-list foi projetado com a funcionalidade de finalizar e retroceder a tarefa, assim como fazemos com o aplicativo do Google Keeper de TODO, já que, no escopo não estava claro sobre esta funcionalidade.
+**Atenção:** a aplicação de todo-list foi projetado com a funcionalidade de finalizar e retroceder a tarefa, assim como fazemos com o aplicativo do Google Keeper de TODO, já que, no escopo não estava claro sobre esta funcionalidade.
 
 ```shell
 curl --location --request PATCH 'http://localhost:8080/todo/1' \
@@ -201,6 +202,8 @@ curl --location --request GET 'http://localhost:8080/todo' \
 ```
 
 Podemos ver as tarefas listadas por outros usuários:
+
+**Atenção:** O recurso de super user está disponível apenas para a listagem, ou seja, um super user não conseguirá alterar ou remover a tarefa de outro usuário.
 
 ```
 [
@@ -304,4 +307,6 @@ Então, a aplicação retornará com os seguintes dados sobre o seu estado e de 
     }
 }
 ```
+
+Caso tenha ficado alguma dúvida fique à vontade para explorar mais sobre a api na documentação a seguir: ``` http://localhost:8080/swagger-ui.html ```
 ## That's all folks!
