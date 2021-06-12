@@ -31,4 +31,8 @@ public class AccessToken {
     public User getUser() {
         return user;
     }
+
+    public String getUsername() {
+        return this.user.getUsername();
+    }
 }

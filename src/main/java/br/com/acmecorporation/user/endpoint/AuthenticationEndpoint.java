@@ -1,13 +1,14 @@
 package br.com.acmecorporation.user.endpoint;
 
 import br.com.acmecorporation.user.domain.AccessToken;
-import br.com.acmecorporation.user.service.TokenService;
 import br.com.acmecorporation.user.endpoint.request.AuthenticationRequest;
 import br.com.acmecorporation.user.endpoint.response.AuthenticationResponse;
+import br.com.acmecorporation.user.service.TokenService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "/auth")
 public class AuthenticationEndpoint {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationEndpoint.class);
     private AuthenticationManager authenticationManager;
     private TokenService tokenService;
 
@@ -44,6 +46,7 @@ public class AuthenticationEndpoint {
 
             AccessToken accessToken = tokenService.generateToken(authentication);
 
+            log.info("Usuário: {} autenticado com sucesso, seu token expira em: {} ", accessToken.getUsername(), accessToken.getExpirationDate());
             return  ResponseEntity.ok(new AuthenticationResponse(accessToken.getToken(), "Bearer", accessToken.getExpirationDate()));
         } catch (AuthenticationException e) {
              return ResponseEntity.badRequest().build();
