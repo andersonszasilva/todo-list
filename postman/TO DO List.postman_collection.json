@@ -168,6 +168,45 @@
 					"response": []
 				},
 				{
+					"name": "Tasks change status - COMPLETED",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{wile.coyote}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\":\"COMPLETED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/todo/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"todo",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Tasks?status=COMPLETED",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -256,45 +295,6 @@
 									"key": "status",
 									"value": "PENDING"
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Tasks change status - COMPLETED",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{wile.coyote}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"status\":\"COMPLETED\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/todo/2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"todo",
-								"2"
 							]
 						}
 					},
@@ -595,6 +595,9 @@
 				},
 				{
 					"name": "Tasks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -606,11 +609,11 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\n  \"summary\": \"Fazer o teste\",\n  \"description\": \"Teste prático\"\n\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -633,9 +636,6 @@
 				},
 				{
 					"name": "Tasks",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -647,11 +647,11 @@
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n\n  \"summary\": \"Fazer o teste\",\n  \"description\": \"Teste prático\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"

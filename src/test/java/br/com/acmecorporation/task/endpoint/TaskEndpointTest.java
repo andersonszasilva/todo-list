@@ -59,29 +59,39 @@ class TaskEndpointTest {
     }
 
     @Test
+    @DisplayName("Usuário que não está logado não deve conseguir criar uma nova tarefa")
+    void shouldNotCreateTask() throws Exception {
+        // Given
+        String request ="{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}";
+
+        //When
+        ResultActions actions = this.mockMvc.perform(post(URL)
+                .content(request)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+        //Then
+        actions.andExpect(status().isUnauthorized());
+    }
+
+    @Test
     @WithUserDetails("wile.coyote@acmecorporation.com")
     @DisplayName("Usuário logado deve listar as suas próprias tarefas ordenadas pelo estado pending")
     void getTasks() throws Exception {
         // Given
         this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
-        // And
         MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao barbeiro\",\"description\": \"Fazer barba e corte de cabelo\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         JSONObject json = new JSONObject(result.getResponse().getContentAsString());
         Long id = json.getLong("id");
 
+        // AND
         this.mockMvc.perform(patch(URL + "/{id}", id)
                 .content("{\"status\": \"COMPLETED\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("COMPLETED"));
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
         //When
         ResultActions actions = this.mockMvc.perform(get(URL)
@@ -95,13 +105,12 @@ class TaskEndpointTest {
 
     @Test
     @WithUserDetails("super.user@acmecorporation.com")
-    @DisplayName("Super usuário  deve conseguir listar tarefas de outros usuários")
+    @DisplayName("Super usuário  deve conseguir visualizar usuário que criou a tarefa")
     void getTasksWithSuperUser() throws Exception {
         // Given
-        MvcResult result = this.mockMvc.perform(post(URL)
+        this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao barbeiro\",\"description\": \"Fazer barba e corte de cabelo\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         //When
         ResultActions actions = this.mockMvc.perform(get(URL)
@@ -120,8 +129,7 @@ class TaskEndpointTest {
         // Given
         MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         JSONObject json = new JSONObject(result.getResponse().getContentAsString());
         Long id = json.getLong("id");
@@ -145,8 +153,7 @@ class TaskEndpointTest {
         // Given
         MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         JSONObject json = new JSONObject(result.getResponse().getContentAsString());
         Long id = json.getLong("id");
@@ -162,6 +169,22 @@ class TaskEndpointTest {
 
     }
 
+
+    @Test
+    @WithUserDetails("wile.coyote@acmecorporation.com")
+    @DisplayName("A aplicação dever retornar 404 para tarefa não encontrada")
+    void getTaskNotFound() throws Exception {
+        // Given
+        Long unknownTaskIdentifier = 315L;
+
+        //When
+        ResultActions actions = this.mockMvc.perform(get(URL + "/{id}", unknownTaskIdentifier)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
+
+        // Then
+        actions.andExpect(status().isNotFound());
+    }
+
     @Test
     @WithUserDetails("wile.coyote@acmecorporation.com")
     @DisplayName("Usuário logado deve conseguir editar a sua tarefa")
@@ -169,8 +192,7 @@ class TaskEndpointTest {
         // Given
         MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         JSONObject json = new JSONObject(result.getResponse().getContentAsString());
         Long id = json.getLong("id");
@@ -194,8 +216,7 @@ class TaskEndpointTest {
         // Given
         MvcResult result = this.mockMvc.perform(post(URL)
                 .content("{\"summary\": \"Ir ao mercado\",\"description\": \"Comprar cervejas\"}")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)).andReturn();
 
         JSONObject json = new JSONObject(result.getResponse().getContentAsString());
         Long id = json.getLong("id");

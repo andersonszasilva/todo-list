@@ -4,9 +4,8 @@ import br.com.acmecorporation.task.domain.Task;
 import br.com.acmecorporation.task.domain.TaskStatus;
 import br.com.acmecorporation.task.endpoint.request.TaskRequest;
 import br.com.acmecorporation.task.endpoint.request.TaskStatusRequest;
-import br.com.acmecorporation.task.endpoint.request.TaskUpdateRequest;
 import br.com.acmecorporation.task.endpoint.response.TaskResponse;
-import br.com.acmecorporation.task.endpoint.response.TaskWithUserResponse;
+import br.com.acmecorporation.task.endpoint.response.TaskSuperUserResponse;
 import br.com.acmecorporation.task.exception.TaskNotFoundException;
 import br.com.acmecorporation.task.service.TaskService;
 import br.com.acmecorporation.user.domain.User;
@@ -69,7 +68,7 @@ public class TaskEndpoint {
             log.info("Listando tarefas com o Usuário Admin: {} - Filtros: {}", loggedUser.getUsername(), status);
             List<Task> tasks = taskService.findAllBy(status);
             log.info("Um total de: {} tarefa(s) listada(s) para o Usuário Admin: {}", tasks.size(), loggedUser.getUsername());
-            return ResponseEntity.ok(TaskWithUserResponse.createListResponse(tasks));
+            return ResponseEntity.ok(TaskSuperUserResponse.createListResponse(tasks));
         }
 
         log.info("Listando tarefas com o Usuário: {} - Filtros: {}", loggedUser.getUsername(), status);
@@ -86,9 +85,9 @@ public class TaskEndpoint {
             @ApiResponse(code = 401, message = "Usuário não autenticado")
     })
     @ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, paramType = "header", example = "Bearer [access_token]",  dataTypeClass = String.class)
-    public ResponseEntity<?> changeTaskStatus(@PathVariable Long id, @RequestBody TaskStatusRequest status, Authentication authentication) {
+    public ResponseEntity<TaskResponse> changeTaskStatus(@PathVariable Long id, @RequestBody TaskStatusRequest status, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
-        log.info("Alterando estado da tarefa com id: {} novo status :{} com usuário: {}", id, status, loggedUser.getUsername());
+        log.info("Alterando estado da tarefa com id: {} novo status: {} com usuário: {}", id, status, loggedUser.getUsername());
 
         try {
             Task task = taskService.changeTaskStatus(id, status.convertTaskStatus(), loggedUser);
@@ -109,7 +108,7 @@ public class TaskEndpoint {
             @ApiResponse(code = 401, message = "Usuário não autenticado")
     })
     @ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, paramType = "header", example = "Bearer [access_token]",  dataTypeClass = String.class)
-    public ResponseEntity<?> deleteTask(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<TaskResponse> deleteTask(@PathVariable Long id, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
         log.info("Deletando tarefa de id: {} com usuário: {}", id, loggedUser.getUsername());
 
@@ -128,7 +127,7 @@ public class TaskEndpoint {
             @ApiResponse(code = 401, message = "Usuário não autenticado")
     })
     @ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, paramType = "header", example = "Bearer [access_token]",  dataTypeClass = String.class)
-    public ResponseEntity<?> getTask(@PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<TaskResponse> getTask(@PathVariable Long id, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
 
         log.info("Visualizando tarefa de id: {} com usuário: {}", id, loggedUser.getUsername());
@@ -146,16 +145,16 @@ public class TaskEndpoint {
             @ApiResponse(code = 401, message = "Usuário não autenticado")
     })
     @ApiImplicitParam(name = "Authorization", value = "Bearer Token", required = true, paramType = "header", example = "Bearer [access_token]",  dataTypeClass = String.class)
-    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TaskUpdateRequest request, Authentication authentication) {
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id, @RequestBody TaskRequest request, Authentication authentication) {
         User loggedUser = (User) authentication.getPrincipal();
-        log.info("Alterando tarefa com id: {} novos valores :{} com usuário: {}", id, request, loggedUser.getUsername());
+        log.info("Alterando tarefa com id: {} novos valores: {} com usuário: {}", id, request, loggedUser.getUsername());
 
         Optional<Task> task = taskService.findBy(id, loggedUser);
         if(task.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        Task saved = taskService.save(request.buildTask(task.get()));
+        Task savedTask = taskService.save(request.buildTaskToUpdate(task.get()));
         log.info("Tarefa com id: {} alterada com usuário: {}", id,  loggedUser.getUsername());
-        return new ResponseEntity<>(TaskResponse.createResponse(saved), HttpStatus.OK);
+        return new ResponseEntity<>(TaskResponse.createResponse(savedTask), HttpStatus.OK);
     }
 
 }

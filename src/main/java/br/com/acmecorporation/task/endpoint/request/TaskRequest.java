@@ -17,6 +17,13 @@ public class TaskRequest {
        return new Task(user, LocalDateTime.now(), this.summary, this.description, TaskStatus.PENDING, null);
     }
 
+    public Task buildTaskToUpdate(Task task) {
+        task.setSummary(this.summary);
+        task.setDescription(this.description);
+        task.setUpdateDate(LocalDateTime.now());
+        return task;
+    }
+
     public String getSummary() {
         return summary;
     }

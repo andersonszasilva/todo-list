@@ -13,4 +13,9 @@ public class TaskStatusRequest {
     public TaskStatus convertTaskStatus() {
         return TaskStatus.valueOf(this.status.name());
     }
+
+    @Override
+    public String toString() {
+        return status.name();
+    }
 }
